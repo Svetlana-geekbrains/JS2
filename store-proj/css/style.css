@@ -11,6 +11,23 @@
     background-color: rgb(233, 233, 233);
 }
 
+.cart-block{
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.62);
+    border-radius: 5px;
+    box-sizing: border-box;
+    right: 0;
+    top: 130%;
+    position: absolute;
+    background-color: white;
+    padding: 20px;
+    color: black;
+    width: 300px;
+}
+
+.invisible{
+    display: none;
+}
+
 .btn-cart,
 .product-btn {
     padding: 5px 15px;

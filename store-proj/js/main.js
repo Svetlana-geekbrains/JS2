@@ -5,22 +5,40 @@ let addListenerCart = () => {
 
 const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
-// метод нигде не используется
-let getData = (url, cb) => {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            if (xhr.status !== 200) {
-                console.log('error');
-            } else {
-                cb(xhr.responseText);
-            }
-        }
-    }
-};
+// метод без промис
+// let getData = (url, cb) => {
+//     let xhr = new XMLHttpRequest();
+//     xhr.open('GET', url, true);
+//     xhr.onreadystatechange = () => {
+//         if (xhr.readyState === 4) {
+//             if (xhr.status !== 200) {
+//                 console.log('error');
+//             } else {
+//                 cb(xhr.responseText);
+//             }
+//         }
+//     }
+// };
 
-class Product {
+// метод с промис
+// let getData = (url) => {
+//     return new Promise((resolve, reject) => {
+//         let xhr = new XMLHttpRequest();
+//         xhr.open('GET', url, true);
+//         xhr.onreadystatechange = () => {
+//             if (xhr.readyState === 4) {
+//                 if (xhr.status !== 200) {
+//                     reject('error');
+//                 } else {
+//                     resolve(xhr.responseText);
+//                 }
+//             }
+//         }
+//     });
+// };
+
+
+class Item {
     constructor(product) {
         let { product_name = 'Имя товара', price = 0, id_product = 0, img = 'no-photo' } = product;
         this.title = product_name;
@@ -31,17 +49,17 @@ class Product {
     }
 
     render() {
-        return `<div class="product-item" id="${this.id}">
+        this.rendered = true;
+        return `<div class="product-item"  data-id="${this.id}">
                   <img class="product-img" src="img/${this.img}.jpg" alt="${this.title}">
                   <h3 class="product-title">${this.title}</h3>
                   <p class="product-price">${this.price} р.</p>
-                  <button class="product-btn">Купить</button>
+                  <button class="product-btn" data-id="${this.id}">Купить</button>
               </div>`
     }
-
 }
 
-class ProductsList {
+class List {
     constructor(container = '.products') {
         this.data = [];
         this.products = [];
@@ -53,14 +71,18 @@ class ProductsList {
     }
 
     // метод подсчета суммарной стоимости всех товаров
-    // return this.products.reduce((accum, item) => accum += item.price, 0);
-    calcSum() {
-        let sum = 0;
-        for (let i = 0; i < this.products.length; i++) {
-            sum += this.products[i].price;
-        }
-        return sum;
-    }
+    // calcSum() {
+    //     let sum = 0;
+    //     for (let i = 0; i < this.products.length; i++) {
+    //         sum += this.products[i].price;
+    //     }
+    //     return sum;
+    // }
+    //                      ИЛИ
+    // calcSum() {
+    //     return this.products.reduce((accum, item) => accum += item.price, 0);
+    // }
+
 
 
     _fetchData() {
@@ -73,17 +95,6 @@ class ProductsList {
                     this.products.push(product);
                 }
             })
-
-        // this.data = [
-        //     { id: 1, title: 'Ноутбук', price: 1000, img: 'Notebook' },
-        //     { id: 2, title: 'Клавиатура', price: 50, img: 'Keyboard' },
-        //     { id: 3, title: 'Мышь', price: 10, img: 'Mouse' },
-        //     { id: 4, title: 'Джойстик', price: 87, img: 'Gamepad' },
-        //     { id: 5, title: 'Ноутбук', price: 1000, img: 'Notebook' },
-        //     { id: 6, title: 'Клавиатура', price: 50, img: 'Keyboard' },
-        //     { id: 7, title: 'Мышь' },
-        //     { id: 8, title: 'Джойстик', price: 87, img: 'Gamepad' },
-        // ];
     }
 
     _render() {
@@ -92,14 +103,7 @@ class ProductsList {
                 continue;
             }
             this.container.insertAdjacentHTML('beforeend', product.render());
-            product.rendered = true;
         }
-
-        // for (let dataEl of this.data) {
-        //     const product = new Product(dataEl);
-        //     this.products.push(product);
-        //     this.container.insertAdjacentHTML('beforeend', product.render())
-        // }
     }
 
     _addListeners() {
@@ -119,8 +123,11 @@ class ProductsList {
             }
         }
     }
-
 }
+
+class Product extends Item { }
+
+class ProductsList extends List { }
 
 class Cart {
     constructor() {
@@ -138,32 +145,45 @@ class Cart {
         //должен включать вызов _render()
     }
 
-    //removeFromCart() - метод удаляет товар из корзины, т.е. удаляет из массива productsInCart (срабатывает при нажатии на кнопку "Удалить") и вызывает метод _contentDisplay() чтобы перерендерить с учетом удаленного элемента
-    //_contentRender() - метод отрисовки содержимого корзины для метода _render() (как метод _render() в классе ProductsList через for проходим элементы массива productsInCart (они же экземпляры класса CartElement), рендерим через метод в классе CartElementс учетом флага rendered)
+    //removeFromCart() - метод удаляет товар из корзины, т.е. удаляет из массива productsInCart (срабатывает при нажатии на кнопку "Удалить") и вызывает внутренний метод remove() класса CartElement
+    //_contentRender() - метод отрисовки содержимого корзины для метода _render() (как метод _render() в классе ProductsList через for проходим элементы массива productsInCart (они же экземпляры класса CartElement), рендерим через метод в классе CartElement)
     //_calcCost() - метод для подсчета стоимости корзины для метода _render() (суммировать поля price всех объектов в productsInCart)
     //_render() - метод для отображения корзины (как всплывающего окна/ другой страницы) и ее содержимого и общей стоимости (методы _contentRender() и _calcCost()) - по нажатию кнопки "Корзина" в верхнем меню
     //_addListenersDelete() - навесить обработчик на кнопки "Удалить" (будет вызывать метод removeFromCart())
 }
 
-class CartElement {
+class CartElement extends Item {
     constructor(product) {
-        let { product_name = 'Имя товара', price = 0, id_product = 0, img = 'no-photo' } = product;
-        this.title = product_name;
-        this.img = img;
-        this.price = price;
-        this.id = id_product;
-        this.rendered = false;
+        super(product)
+        this.count = 0;
+    }
+
+    increaseCount() {
+        this.count += 1;
+        this._updateItem();
+    }
+
+    remove() {
+        document.querySelector(`.cart-item[data-id="${this.id}"]`).remove();
     }
 
     render() {
-        return `<div class="product-item-cart" id="${this.id}">
-                  <img class="product-img-cart" src="img/${this.img}.jpg" alt="${this.title}">
-                  <div class="product-item-cart-text"
-                    <h3 class="product-title">${this.title}</h3>
-                    <p class="product-price">${this.price} р.</p>
+        this.rendered = true;
+        return `<div class="cart-item" data-id="${this.id}">
+                  <img class="cart-item-img" src="img/${this.img}.jpg" alt="${this.title}">
+                  <div class="cart-item-text"
+                    <h3 class="cart-item-title">${this.title}</h3>
+                    <p class="cart-item-count">Количество: ${this.count} шт.</p>
+                    <p class="cart-item-price">Общая сумма: ${this.count * this.price} р.</p>
                   </div>  
-                  <button class="delete-btn">Удалить</button>
+                  <button class="delete-btn" data-id="${this.id}">Удалить</button>
                 </div>`
+    }
+
+    _updateItem() {
+        const block = document.querySelector(`.cart-item[data-id="${this.id}"]`);
+        block.querySelector('.cart-item-count').textContent = `Количество: ${this.count} шт.`;
+        block.querySelector('.cart-item-price').textContent = `Общая сумма: ${this.count * this.price} р.`;
     }
 
 }
