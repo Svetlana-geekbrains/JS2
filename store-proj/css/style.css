@@ -128,22 +128,34 @@
     margin: 5px 15px;
 }
 
+.btn-search {
+    background-color: transparent;
+    border: none;
+    color: #555454;
+    font-size: 1.2em;
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+}
+
 .search-form{
     position: relative;
     margin-right: 50px;
     display: inline-block;
 }
+
 .search-field:focus{
     outline: none;
 }
+
 .search-field {
     box-sizing: border-box;
     width: 200px;
-    color: #fafafa;
+    color: #555454;
     padding: 10px;
     background-color: transparent;
     border: none;
-    border-bottom: 2px solid #fafafa;
+    border-bottom: 2px solid #555454;
 }
 
 .cart-item-img {
