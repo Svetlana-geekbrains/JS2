@@ -11,7 +11,7 @@
     <div id="app">
         <header>
             <div class="menu">
-                <form action="#" class="search-form">
+                <form action="#" class="search-form" @submit.prevent="">
                     <input type="text" class="search-field" v-model="searchLine">
                     <button class="btn-search" type="submit" @click="filter(searchLine)">
                         <i class="fas fa-search"></i>

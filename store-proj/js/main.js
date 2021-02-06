@@ -4,6 +4,8 @@ const Shop = {
             API: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
             catalogUrl: '/catalogData.json',
             basketUrl: '/getBasket.json',
+            addUrl: '/addToBasket.json',
+            removeUrl: '/deleteFromBasket.json',
             isVisibleCart: false,
             products: [],
             productsInCart: [],
@@ -19,20 +21,28 @@ const Shop = {
                 .catch(error => console.log(error));
         },
         addProduct(product) {
-            if (this.productsInCart.length >= 1) {
-                let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
-                (inArr) ? inArr.quantity++ : this.addNewProduct(product);
-            }
-            else this.addNewProduct(product);
+            this.getJson(`${this.API + this.addUrl}`)
+                .then(data => {
+                    if (data.result) {
+                        if (this.productsInCart.length) {
+                            let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
+                            (inArr) ? inArr.quantity++ : this.addNewProduct(product);
+                        }
+                        else this.addNewProduct(product);
+                    }
+                })
         },
         addNewProduct(product) {
-            let prod = Object.assign({}, product);
-            prod.quantity = 1;
+            let prod = Object.assign({ quantity: 1 }, product);
             this.productsInCart.push(prod);
         },
         delProduct(product) {
-            let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
-            (inArr.quantity > 1) ? inArr.quantity-- : inArr.remove; //не работает .remove, как удалить объект напрямую, без поиска его по id и др. полям?
+            this.getJson(`${this.API + this.removeUrl}`)
+                .then(data => {
+                    if (data.result) {
+                        (product.quantity > 1) ? product.quantity-- : this.productsInCart.slice(this.productsInCart.indexOf(product), 1); //не работает .remove, как удалить объект напрямую, без поиска его по id и др. полям?
+                    }
+                })
         },
         filter(value) {
             const regexp = new RegExp(value, 'i');
@@ -56,7 +66,7 @@ const Shop = {
     computed: {
         displaySum() {
             let res;
-            (this.calcSum() === 0) ? res = "Нет данных" : res = `Общая сумма товаров в корзине: ${this.calcSum()}`
+            (!this.productsInCart.length) ? res = "Нет данных" : res = `Общая сумма товаров в корзине: ${this.calcSum()} р.`
             return res
         }
     },
@@ -70,7 +80,7 @@ const Shop = {
 
         this.getJson(`${this.API + this.basketUrl}`)
             .then(data => {
-                for (let cartProduct of data) { //Uncaught (in promise) TypeError: data is not iterable
+                for (let cartProduct of data.contents) {
                     this.productsInCart.push(cartProduct);
                 }
             });
