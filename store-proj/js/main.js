@@ -9,9 +9,21 @@ const Shop = {
             isVisibleCart: false,
             products: [],
             productsInCart: [],
-            filtered: [],
             imgCatalog: 'img/no-photo.jpg',  // значение по умолчанию, если от сервера пришли объекты, не содержащие название картинки
             searchLine: ''
+        }
+    },
+    computed: {
+        displaySum() {
+            let res;
+            (!this.productsInCart.length) ? res = "Нет данных" : res = `Общая сумма товаров в корзине: ${this.calcSum()} р.`
+            return res
+        },
+        filteredArr() {
+            const regexp = new RegExp(this.searchLine, 'i');
+            //не работает фильтрация, хотя в массив добавляется все верно
+            console.log(this.products.filter(product => regexp.test(product.product_name)))
+            return this.products.filter(product => regexp.test(product.product_name));
         }
     },
     methods: {
@@ -24,52 +36,48 @@ const Shop = {
             this.getJson(`${this.API + this.addUrl}`)
                 .then(data => {
                     if (data.result) {
-                        if (this.productsInCart.length) {
-                            let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
-                            (inArr) ? inArr.quantity++ : this.addNewProduct(product);
+                        let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
+                        if (inArr) {
+                            inArr.quantity++;
                         }
-                        else this.addNewProduct(product);
+                        else {
+                            let prod = Object.assign({ quantity: 1 }, product);
+                            this.productsInCart.push(prod);
+                        }
                     }
                 })
-        },
-        addNewProduct(product) {
-            let prod = Object.assign({ quantity: 1 }, product);
-            this.productsInCart.push(prod);
         },
         delProduct(product) {
             this.getJson(`${this.API + this.removeUrl}`)
                 .then(data => {
                     if (data.result) {
-                        (product.quantity > 1) ? product.quantity-- : this.productsInCart.slice(this.productsInCart.indexOf(product), 1); //не работает .remove, как удалить объект напрямую, без поиска его по id и др. полям?
+                        if (product.quantity > 1) {
+                            product.quantity--;
+                        }
+                        else {
+                            this.productsInCart.splice(this.productsInCart.indexOf(product), 1);
+                        }
                     }
                 })
         },
-        filter(value) {
-            const regexp = new RegExp(value, 'i');
-            console.log(value);
-            this.filtered = this.products.filter(product => regexp.test(product.product_name));
-            console.log(this.filtered);
-            this.products.forEach(product => {
-                const block = document.querySelector(`.product-item[data-id="${product.id_product}"]`); // можно как-то получить данные из :key?
-                console.log(block);
-                if (this.filtered.includes(product)) {
-                    block.classList.remove('invisible');
-                } else {
-                    block.classList.add('invisible');//класс добавляется, но элемент не пропадает (возможно надо как-то переренделить его)
-                }
-            })
-        },
+        // filter(value) {
+        //     const regexp = new RegExp(value, 'i');
+        //     this.filtered = this.products.filter(product => regexp.test(product.product_name));
+        //     // лучше рендерить содержимое filtered
+        //     this.products.forEach(product => {
+        //         const block = document.querySelector(`.product-item[data-id="${product.id_product}"]`);
+        //         if (this.filtered.includes(product)) {
+        //             block.classList.remove('invisible');
+        //         } else {
+        //             block.classList.add('invisible');
+        //         }
+        //     })
+        // },
         calcSum() {
             return this.productsInCart.reduce((accum, item) => accum += (item.price * item.quantity), 0);
         }
     },
-    computed: {
-        displaySum() {
-            let res;
-            (!this.productsInCart.length) ? res = "Нет данных" : res = `Общая сумма товаров в корзине: ${this.calcSum()} р.`
-            return res
-        }
-    },
+
     mounted() {
         this.getJson(`${this.API + this.catalogUrl}`)
             .then(data => {

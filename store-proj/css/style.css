@@ -30,10 +30,6 @@
     justify-content: space-between;
 }
 
-.invisible{
-    display: none;
-}
-
 .cart-block:before{
     content: '';
     width: 0;
@@ -160,6 +156,10 @@
 
 .cart-item-img {
     width: 100px;
+}
+
+.invisible{
+    display: none;
 }
 
 

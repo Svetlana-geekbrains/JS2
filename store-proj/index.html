@@ -12,14 +12,14 @@
         <header>
             <div class="menu">
                 <form action="#" class="search-form" @submit.prevent="">
-                    <input type="text" class="search-field" v-model="searchLine">
-                    <button class="btn-search" type="submit" @click="filter(searchLine)">
+                    <input type="text" class="search-field" v-model.lazy="searchLine">
+                    <button class="btn-search" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
                 <button class="btn-cart" @click="isVisibleCart = !isVisibleCart">Корзина</button>
                 <div class="cart-block" v-show="isVisibleCart">
-                    <div class="cart-item" :data-id="el.id_product" v-for="el of productsInCart" :key="el.id_product">
+                    <div class="cart-item" :data-id="el.id_product" v-for="el of filteredArr" :key="el.id_product">
                         <img class="cart-item-img" :src="imgCatalog" :alt="el.product_name">
                         <div class="cart-item-text">
                             <h3 class="cart-item-title">{{ el.product_name }}</h3>
