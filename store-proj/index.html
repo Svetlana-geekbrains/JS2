@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Интернет-магазин</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div class="menu">
+                <form action="#" class="search-form" @submit.prevent="">
+                    <Filter ref="filter"></Filter>
+                    <!-- <input type="text" class="search-field" v-model.lazy="searchLine">
+                    <button class="btn-search" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button> -->
+                </form>
+                <Cart ref="cart"></Cart>
+            </div>
+        </header>
+        <main class="content">
+            <Products ref="catalog"></Products>
+        </main>
+
+        <a href="../class_Humburger/index.html">Доп. задание (собрать гамбургер)</a><br>
+        <a href="../dz4/index.html">ДЗ 4 урок</a>
+    </div>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+        integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script type="module" defer src="js/main.js"></script>
+</body>
+
+</html>

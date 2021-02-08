@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.menu {
+    padding: 20px 40px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+    background-color: rgb(233, 233, 233);
+    position: relative;
+}
+
+.cart-block{
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.62);
+    border-radius: 5px;
+    box-sizing: border-box;
+    right: 35px;
+    top: 85%;
+    position: absolute;
+    background-color: white;
+    padding: 20px;
+    color: black;
+    width: 500px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-block:before{
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -10px;
+    right: 35px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+}
+
+.cart-item-text {
+    margin-right: 80px;
+    align-self: center;
+}
+
+.cart-sum {
+    font-size: 20px;
+    text-decoration: underline;
+}
+
+.btn-cart,
+.product-btn,
+.delete-btn {
+    padding: 5px 15px;
+    font-size: 14px;
+    border-radius: 15px;
+    border-width: 1px;
+    box-sizing: border-box;
+    background-color: rgb(255, 255, 255);
+}
+
+.delete-btn {
+    height: 20%;
+    align-self: center;
+}
+
+.btn-cart:hover,
+.btn-cart:active,
+.btn-cart:focus,
+.product-btn:hover,
+.product-btn:active,
+.product-btn:focus,
+.delete-btn:hover,
+.delete-btn:active,
+.delete-btn:focus {
+    border-color: blue;
+    background-color: rgb(150, 176, 223);
+}
+
+.content {
+    width: 85%;
+    margin: 0 auto;
+    padding: 20px 0px;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    background-color: rgb(182, 228, 184);
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5px;
+    box-sizing: border-box;
+    margin: 10px;
+}
+
+.product-img {
+    width: 95%;
+    margin: 0 auto;
+    padding-bottom: 25px;
+}
+
+.product-title {
+    margin-bottom: 15px;
+    align-self: center;
+    font-size: 14px;
+}
+
+.product-price {
+    margin-bottom: 25px;
+    align-self: center;
+}
+
+.product-btn {
+    margin: 5px 15px;
+}
+
+.btn-search {
+    background-color: transparent;
+    border: none;
+    color: #555454;
+    font-size: 1.2em;
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+}
+
+.search-form{
+    position: relative;
+    margin-right: 50px;
+    display: inline-block;
+}
+
+.search-field:focus{
+    outline: none;
+}
+
+.search-field {
+    box-sizing: border-box;
+    width: 200px;
+    color: #555454;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #555454;
+}
+
+.cart-item-img {
+    width: 100px;
+}
+
+.invisible{
+    display: none;
+}
+
+
