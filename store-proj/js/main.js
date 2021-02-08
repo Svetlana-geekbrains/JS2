@@ -1,29 +1,17 @@
+import { Products } from './Products.js';
+import { Cart } from './Cart.js';
+import { Filter } from './Filter.js';
+
 const Shop = {
+    components: {
+        Products,
+        Cart,
+        Filter
+    },
     data() {
         return {
             API: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
-            catalogUrl: '/catalogData.json',
-            basketUrl: '/getBasket.json',
-            addUrl: '/addToBasket.json',
-            removeUrl: '/deleteFromBasket.json',
-            isVisibleCart: false,
-            products: [],
-            productsInCart: [],
-            imgCatalog: 'img/no-photo.jpg',  // значение по умолчанию, если от сервера пришли объекты, не содержащие название картинки
-            searchLine: ''
-        }
-    },
-    computed: {
-        displaySum() {
-            let res;
-            (!this.productsInCart.length) ? res = "Нет данных" : res = `Общая сумма товаров в корзине: ${this.calcSum()} р.`
-            return res
-        },
-        filteredArr() {
-            const regexp = new RegExp(this.searchLine, 'i');
-            //не работает фильтрация, хотя в массив добавляется все верно
-            console.log(this.products.filter(product => regexp.test(product.product_name)))
-            return this.products.filter(product => regexp.test(product.product_name));
+            imgProd: 'img/no-photo.jpg'
         }
     },
     methods: {
@@ -31,75 +19,7 @@ const Shop = {
             return fetch(url)
                 .then(result => result.json())
                 .catch(error => console.log(error));
-        },
-        addProduct(product) {
-            this.getJson(`${this.API + this.addUrl}`)
-                .then(data => {
-                    if (data.result) {
-                        let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
-                        if (inArr) {
-                            inArr.quantity++;
-                        }
-                        else {
-                            let prod = Object.assign({ quantity: 1 }, product);
-                            this.productsInCart.push(prod);
-                        }
-                    }
-                })
-        },
-        delProduct(product) {
-            this.getJson(`${this.API + this.removeUrl}`)
-                .then(data => {
-                    if (data.result) {
-                        if (product.quantity > 1) {
-                            product.quantity--;
-                        }
-                        else {
-                            this.productsInCart.splice(this.productsInCart.indexOf(product), 1);
-                        }
-                    }
-                })
-        },
-        // filter(value) {
-        //     const regexp = new RegExp(value, 'i');
-        //     this.filtered = this.products.filter(product => regexp.test(product.product_name));
-        //     // лучше рендерить содержимое filtered
-        //     this.products.forEach(product => {
-        //         const block = document.querySelector(`.product-item[data-id="${product.id_product}"]`);
-        //         if (this.filtered.includes(product)) {
-        //             block.classList.remove('invisible');
-        //         } else {
-        //             block.classList.add('invisible');
-        //         }
-        //     })
-        // },
-        calcSum() {
-            return this.productsInCart.reduce((accum, item) => accum += (item.price * item.quantity), 0);
         }
-    },
-
-    mounted() {
-        this.getJson(`${this.API + this.catalogUrl}`)
-            .then(data => {
-                for (let product of data) {
-                    this.products.push(product);
-                }
-            });
-
-        this.getJson(`${this.API + this.basketUrl}`)
-            .then(data => {
-                for (let cartProduct of data.contents) {
-                    this.productsInCart.push(cartProduct);
-                }
-            });
-        //почему-то выдает Fetch API cannot load file:///C:/Users/Admin/Documents/GitHub/JS2/store-proj/getProducts.json. URL scheme must be "http" or "https" for CORS request.
-        //это можно как-то исправить? может надо поставить какое-то расширение для VScode или поможет только поместить этот файл где-то не на локалке?
-        this.getJson(`getProducts.json`)
-            .then(data => {
-                for (let product of data) {
-                    this.products.push(product);
-                }
-            });
     }
 };
 

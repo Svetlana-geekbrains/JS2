@@ -12,35 +12,17 @@
         <header>
             <div class="menu">
                 <form action="#" class="search-form" @submit.prevent="">
-                    <input type="text" class="search-field" v-model.lazy="searchLine">
+                    <Filter ref="filter"></Filter>
+                    <!-- <input type="text" class="search-field" v-model.lazy="searchLine">
                     <button class="btn-search" type="submit">
                         <i class="fas fa-search"></i>
-                    </button>
+                    </button> -->
                 </form>
-                <button class="btn-cart" @click="isVisibleCart = !isVisibleCart">Корзина</button>
-                <div class="cart-block" v-show="isVisibleCart">
-                    <div class="cart-item" :data-id="el.id_product" v-for="el of filteredArr" :key="el.id_product">
-                        <img class="cart-item-img" :src="imgCatalog" :alt="el.product_name">
-                        <div class="cart-item-text">
-                            <h3 class="cart-item-title">{{ el.product_name }}</h3>
-                            <p class="cart-item-count">Количество: {{ el.quantity }} шт.</p>
-                            <p class="cart-item-price">Общая сумма: {{ el.quantity * el.price}} р.</p>
-                        </div>
-                        <button class="delete-btn" @click="delProduct(el)">Удалить</button>
-                    </div>
-                    <div class="cart-sum">{{displaySum}}</div>
-                </div>
+                <Cart ref="cart"></Cart>
             </div>
         </header>
         <main class="content">
-            <div class="products">
-                <div class="product-item" :data-id="el.id_product" v-for="el of products" :key="el.id_product">
-                    <img class="product-img" :src="imgCatalog" :alt="el.product_name">
-                    <h3 class="product-title">{{ el.product_name }}</h3>
-                    <p class="product-price">{{ el.price }} р.</p>
-                    <button class="product-btn" @click="addProduct(el)">Купить</button>
-                </div>
-            </div>
+            <Products ref="catalog"></Products>
         </main>
 
         <a href="../class_Humburger/index.html">Доп. задание (собрать гамбургер)</a><br>
@@ -51,7 +33,7 @@
         integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@next"></script>
-    <script src="js/main.js"></script>
+    <script type="module" defer src="js/main.js"></script>
 </body>
 
 </html>
