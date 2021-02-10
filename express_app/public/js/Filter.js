@@ -5,10 +5,8 @@ export const Filter = {
         }
     },
     computed: {
-        filteredArr() {
-            const regexp = new RegExp(this.searchLine, 'i');
-            //console.log(this.$root.$refs.catalog.products.filter(product => regexp.test(product.product_name)))
-            return this.$root.$refs.catalog.products.filter(product => regexp.test(product.product_name));
+        regular() {
+            return new RegExp(this.searchLine, 'i');
         }
     },
     template: `<input type="text" class="search-field" v-model.lazy="searchLine">

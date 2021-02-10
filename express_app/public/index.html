@@ -12,11 +12,7 @@
         <header>
             <div class="menu">
                 <form action="#" class="search-form" @submit.prevent="">
-                    <Filter ref="filter"></Filter>
-                    <!-- <input type="text" class="search-field" v-model.lazy="searchLine">
-                    <button class="btn-search" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button> -->
+                    <component is="Filter" ref="filter"></component>
                 </form>
                 <Cart ref="cart"></Cart>
             </div>
@@ -25,8 +21,8 @@
             <Products ref="catalog"></Products>
         </main>
 
-        <a href="../class_Humburger/index.html">Доп. задание (собрать гамбургер)</a><br>
-        <a href="../dz4/index.html">ДЗ 4 урок</a>
+        <!-- <a href="../class_Humburger/index.html">Доп. задание (собрать гамбургер)</a><br>
+        <a href="../dz4/index.html">ДЗ 4 урок</a> -->
     </div>
 
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"

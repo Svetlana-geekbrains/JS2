@@ -24,7 +24,12 @@ export const Products = {
                 }
             })
     },
+    computed: {
+        filtered() {
+            return this.products.filter(product => this.$root.$refs.filter.regular.test(product.product_name));
+        }
+    },
     template: `<div class="products">
-                    <Product v-for="el of products" :key="el.id_product" :img="$root.imgProd" :product="el"></Product>
+                    <Product v-for="el of filtered" :key="el.id_product" :img="$root.imgProd" :product="el"></Product>
                 </div>`
 };

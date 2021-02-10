@@ -51,10 +51,12 @@ export const Cart = {
     },
     computed: {
         displaySum() {
-            let res;
-            (!this.productsInCart.length) ? res = "Нет данных" : res = `Общая сумма товаров в корзине: ${this.calcSum()} р.`
-            return res
-        }
+            return !this.productsInCart.length ? "Нет данных" : `Общая сумма товаров в корзине: ${this.calcSum()} р.`
+        },
+        // можно включить фильтрацию и для товаров в корзине (заменить productsInCart на filtered в v-for в template)
+        // filtered() {
+        //     return this.productsInCart.filter(product => this.$root.$refs.filter.regular.test(product.product_name));
+        // }
     },
     mounted() {
         this.$root.getJson(`${this.$root.API + this.basketUrl}`)
