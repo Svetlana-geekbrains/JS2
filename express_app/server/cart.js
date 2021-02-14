@@ -9,7 +9,13 @@ const change = (cart, req) => {
     return JSON.stringify(cart, null, 4);
 };
 
+const del = (cart, req) => {
+    cart.contents.splice(cart.contents.indexOf(req.body), 1);
+    return JSON.stringify(cart, null, 4);
+};
+
 module.exports = {
     add,
-    change
+    change,
+    del
 };

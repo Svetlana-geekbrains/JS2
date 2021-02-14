@@ -3,10 +3,13 @@ const fs = require('fs');
 const cart = require('./cartRouter');
 const app = express();
 
+//преобразование json --> object (чтобы не парсить каждый раз)
 app.use(express.json());
 app.use('/', express.static('public'));
-app.use('/api/cart', cart);
 
+//обработчик для корзины
+app.use('/api/cart', cart); // идем в cartRouter.js, все методы зовутся оттуда
+//обработчик для каталога
 app.get('/api/products', (req, res) => {
     fs.readFile('server/db/products.json', (err, data) => {
         if (err) {

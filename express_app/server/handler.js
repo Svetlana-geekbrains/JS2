@@ -9,7 +9,7 @@ const handler = (req, res, action, file) => {
             return;
         }
 
-        let newCart = cart[action](JSON.parse(data), req);
+        let newCart = cart[action](JSON.parse(data), req); //выполняем метод из cart.js в зависимости от того, что прислал cartRouter.js
         fs.writeFile(file, newCart, (err) => {
             if (err) {
                 console.log(err);
@@ -17,7 +17,7 @@ const handler = (req, res, action, file) => {
                 return;
             }
 
-            res.send({ result: 1 });
+            res.send({ result: 1 }); //удачно внесены изменения на сервере
         });
     })
 };

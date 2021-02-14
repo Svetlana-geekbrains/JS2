@@ -6,41 +6,47 @@ export const Cart = {
     },
     data() {
         return {
-            basketUrl: '/getBasket.json',
-            addUrl: '/addToBasket.json',
-            removeUrl: '/deleteFromBasket.json',
             isVisibleCart: false,
             productsInCart: []
         }
     },
     methods: {
         addProduct(product) {
-            this.$root.getJson(`${this.$root.API + this.addUrl}`)
+            let find = this.productsInCart.find(el => el.id_product === product.id_product);
+            if (find) {
+                this.$root.putJson(`/api/cart/${find.id_product}`, { quantity: 1 })
+                    .then(data => {
+                        if (data.result) {
+                            find.quantity++
+                        }
+                    });
+                return;
+            }
+
+            let prod = Object.assign({ quantity: 1 }, product);
+            this.$root.postJson(`/api/cart`, prod) //обработчик по этому пути в server.js, в postJson  файла main.js лежит название запроса (post) и инструкция - поместить передаваемый объект в тело post-запроса
                 .then(data => {
                     if (data.result) {
-                        let inArr = this.productsInCart.find(elem => elem.id_product === product.id_product);
-                        if (inArr) {
-                            inArr.quantity++;
-                        }
-                        else {
-                            let prod = Object.assign({ quantity: 1 }, product);
-                            this.productsInCart.push(prod);
-                        }
+                        this.productsInCart.push(prod);
                     }
-                })
+                });
         },
         delProduct(product) {
-            this.$root.getJson(`${this.$root.API + this.removeUrl}`)
+            if (product.quantity > 1) {
+                this.$root.putJson(`/api/cart/${product.id_product}`, { quantity: -1 })
+                    .then(data => {
+                        if (data.result) {
+                            product.quantity--
+                        }
+                    });
+                return;
+            }
+            this.$root.delJson(`/api/cart/${product}`)
                 .then(data => {
                     if (data.result) {
-                        if (product.quantity > 1) {
-                            product.quantity--;
-                        }
-                        else {
-                            this.productsInCart.splice(this.productsInCart.indexOf(product), 1);
-                        }
+                        this.productsInCart.splice(this.productsInCart.indexOf(product), 1);
                     }
-                })
+                });
         },
         calcSum() {
             return this.productsInCart.reduce((accum, item) => accum += (item.price * item.quantity), 0);
@@ -59,12 +65,15 @@ export const Cart = {
         // }
     },
     mounted() {
-        this.$root.getJson(`${this.$root.API + this.basketUrl}`)
+        this.$root.getJson(`/api/cart`)
             .then(data => {
-                for (let cartProduct of data.contents) {
-                    this.productsInCart.push(cartProduct);
+                if (!data) {
+                    return;
                 }
-            })
+                for (let product of data.contents) {
+                    this.productsInCart.push(product);
+                }
+            });
     },
     template: `<button class="btn-cart" @click="isVisibleCart = !isVisibleCart">Корзина</button>
                <div class="cart-block" v-show="isVisibleCart">

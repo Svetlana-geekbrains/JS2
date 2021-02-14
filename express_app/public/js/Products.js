@@ -6,23 +6,19 @@ export const Products = {
     },
     data() {
         return {
-            catalogUrl: '/catalogData.json',
             products: []
         }
     },
     mounted() {
-        this.$root.getJson(`${this.$root.API + this.catalogUrl}`)
+        this.$root.getJson(`/api/products`)
             .then(data => {
+                if (!data) {
+                    return;
+                }
                 for (let product of data) {
                     this.products.push(product);
                 }
             });
-        this.$root.getJson(`getProducts.json`)
-            .then(data => {
-                for (let product of data) {
-                    this.products.push(product);
-                }
-            })
     },
     computed: {
         filtered() {
