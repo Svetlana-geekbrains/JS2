@@ -24,7 +24,7 @@ router.put('/:id', (req, res) => {
     handler(req, res, 'change', 'server/db/userCart.json');
 });
 //удалить товар из корзины
-router.delete('/', (req, res) => {
+router.delete('/:id', (req, res) => {
     handler(req, res, 'del', 'server/db/userCart.json');
 });
 

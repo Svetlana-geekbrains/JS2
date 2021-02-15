@@ -43,13 +43,12 @@ const Shop = {
                 .then(result => result.json())
                 .catch(error => this.$refs.error.setError(error));
         },
-        delJson(url, data) {
+        deleteJson(url) {
             return fetch(url, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
+                }
             })
                 .then(result => result.json())
                 .catch(error => this.$refs.error.setError(error));

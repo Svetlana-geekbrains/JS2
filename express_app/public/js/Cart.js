@@ -24,7 +24,7 @@ export const Cart = {
             }
 
             let prod = Object.assign({ quantity: 1 }, product);
-            this.$root.postJson(`/api/cart`, prod) //обработчик по этому пути в server.js, в postJson  файла main.js лежит название запроса (post) и инструкция - поместить передаваемый объект в тело post-запроса
+            this.$root.postJson(`/api/cart`, prod) //обработчик по этому пути в server.js, в postJson файла main.js лежит название запроса (post) и инструкция - поместить передаваемый объект в тело post-запроса
                 .then(data => {
                     if (data.result) {
                         this.productsInCart.push(prod);
@@ -41,7 +41,7 @@ export const Cart = {
                     });
                 return;
             }
-            this.$root.delJson(`/api/cart/${product}`)
+            this.$root.deleteJson(`/api/cart/${product.id_product}`)
                 .then(data => {
                     if (data.result) {
                         this.productsInCart.splice(this.productsInCart.indexOf(product), 1);
@@ -68,6 +68,7 @@ export const Cart = {
         this.$root.getJson(`/api/cart`)
             .then(data => {
                 if (!data) {
+                    console.log("пусто")
                     return;
                 }
                 for (let product of data.contents) {
