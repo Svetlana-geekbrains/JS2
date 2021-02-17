@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Интернет-магазин</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div class="menu">
+                <form action="#" class="search-form" @submit.prevent="">
+                    <component is="Filter" ref="filter"></component>
+                </form>
+                <Cart ref="cart"></Cart>
+            </div>
+        </header>
+        <main class="content">
+            <Products ref="catalog"></Products>
+            <Error ref="error"></Error>
+        </main>
+
+        <!-- <a href="../class_Humburger/index.html">Доп. задание (собрать гамбургер)</a><br>
+        <a href="../dz4/index.html">ДЗ 4 урок</a> -->
+    </div>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+        integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script type="module" defer src="js/main.js"></script>
+</body>
+
+</html>
